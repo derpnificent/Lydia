@@ -17,33 +17,33 @@ ini_set('display_errors', 1);
  * clean        = 1      => controller/method/arg1/arg2/arg3
  * querystring  = 2      => index.php?q=controller/method/arg1/arg2/arg3
  */
-$ly->config['url_type'] = 1;
+$de->config['url_type'] = 1;
 
 /**
  * Set a base_url to use another than the default calculated
  */
-$ly->config['base_url'] = null;
+$de->config['base_url'] = null;
 
 /**
  * Define session name
  */
-$ly->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]);
+$de->config['session_name'] = preg_replace('/[:\.\/-_]/', '', $_SERVER["SERVER_NAME"]);
 
 /**
  * Define server timezone
  */
-$ly->config['timezone'] = 'Europe/Stockholm';
+$de->config['timezone'] = 'Europe/Stockholm';
 
 /**
  * Define internal character encoding
  */
-$ly->config['character_encoding'] = 'UTF-8';
+$de->config['character_encoding'] = 'UTF-8';
 
 /**
  * Define language
  */
 $de->config['language'] = 'en';
-$de->config['base_url'] = 'http://www.student.bth.se/~hakv13/phpmvc/kmom2/lydia/';
+
 
 
 /**
