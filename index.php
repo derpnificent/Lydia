@@ -5,18 +5,18 @@
 define('LYDIA_INSTALL_PATH', dirname(__FILE__));
 define('LYDIA_SITE_PATH', LYDIA_INSTALL_PATH . '/site');
 
-require(LYDIA_INSTALL_PATH.'/src/CLydia/bootstrap.php');
+require(LYDIA_INSTALL_PATH.'/src/CDerp/bootstrap.php');
 
-$ly = CLydia::Instance();
+$de = CDerp::Instance();
 
 
 //
 // PHASE: FRONTCONTROLLER ROUTE
 //
-$ly->FrontControllerRoute();
+$de->FrontControllerRoute();
 
 //
 // PHASE: THEME ENGINE RENDER
 //
-$ly->ThemeEngineRender();
+$de->ThemeEngineRender();
 

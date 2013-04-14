@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine on
-  # Must use RewriteBase on www.student.bth.se, Rewritebase for url /~mos/test is /~mos/test/
+  # Must use RewriteBase on www.student.bth.se, Rewritebase for url /~hakv13/phpmvc is /~hakv13/phpmvc/
   RewriteBase /~hakv13/phpmvc/kmom2/lydia/
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

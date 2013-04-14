@@ -42,7 +42,8 @@ $ly->config['character_encoding'] = 'UTF-8';
 /**
  * Define language
  */
-$ly->config['language'] = 'en';
+$de->config['language'] = 'en';
+$de->config['base_url'] = 'http://www.student.bth.se/~hakv13/phpmvc/kmom2/lydia/';
 
 
 /**
@@ -51,10 +52,10 @@ $ly->config['language'] = 'en';
  * The array-key is matched against the url, for example: 
  * the url 'developer/dump' would instantiate the controller with the key "developer", that is 
  * CCDeveloper and call the method "dump" in that class. This process is managed in:
- * $ly->FrontControllerRoute();
+ * $de->FrontControllerRoute();
  * which is called in the frontcontroller phase from index.php.
  */
-$ly->config['controllers'] = array(
+$de->config['controllers'] = array(
   'index'     => array('enabled' => true,'class' => 'CCIndex'),
   'developer' => array('enabled' => true,'class' => 'CCDeveloper'),
 );
@@ -62,7 +63,7 @@ $ly->config['controllers'] = array(
 /**
  * Settings for the theme.
  */
-$ly->config['theme'] = array(
+$de->config['theme'] = array(
   // The name of the theme in the theme directory
   'name'    => 'core', 
 );
