@@ -5,7 +5,7 @@
 define('LYDIA_INSTALL_PATH', dirname(__FILE__));
 define('LYDIA_SITE_PATH', LYDIA_INSTALL_PATH . '/site');
 
-require(LYDIA_INSTALL_PATH.'/src/CDerp/bootstrap.php');
+require(LYDIA_INSTALL_PATH.'/src/bootstrap.php');
 
 $de = CDerp::Instance();
 

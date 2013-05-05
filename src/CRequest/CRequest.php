@@ -2,7 +2,7 @@
 /**
  * Parse the request and identify controller, method and arguments.
  *
- * @package LydiaCore
+ * @package Derp
  */
 class CRequest {
 
@@ -16,12 +16,10 @@ class CRequest {
   /**
    * Constructor
    *
-   * Decide which type of url should be generated as outgoing links.
-   * default      = 0      => index.php/controller/method/arg1/arg2/arg3
-   * clean        = 1      => controller/method/arg1/arg2/arg3
-   * querystring  = 2      => index.php?q=controller/method/arg1/arg2/arg3
+   * Default is to generate url's of type index.php/controller/method/arg1/arg2/arg2
    *
-   * @param boolean $urlType integer 
+   * @param boolean $clean generate clean url's of type /controller/method/arg1/arg2/arg2
+   * @param boolean $querystring generate clean url's of type index.php?q=controller/method/arg1/arg2/arg2
    */
   public function __construct($urlType=0) {
     $this->cleanUrl       = $urlType= 1 ? true : false;
@@ -32,8 +30,27 @@ class CRequest {
   /**
    * Create a url in the way it should be created.
    *
+   * @param $url string the relative url or the controller
+   * @param $method string the method to use, $url is then the controller or empty for current
+   * @param $arguments string the extra arguments to send to the method
    */
-  public function CreateUrl($url=null) {
+  public function CreateUrl($url=null, $method=null, $arguments=null) {
+    // If fully qualified just leave it.
+    if(!empty($url) && (strpos($url, '://') || $url[0] == '/')) {
+      return $url;
+    }
+    
+    // Get current controller if empty and method or arguments choosen
+    if(empty($url) && (!empty($method) || !empty($arguments))) {
+      $url = $this->controller;
+    }
+    
+    // Get current method if empty and arguments choosen
+    if(empty($method) && !empty($arguments)) {
+      $method = $this->method;
+    }
+    
+    // Create url according to configured style
     $prepend = $this->base_url;
     if($this->cleanUrl) {
       ;
@@ -42,7 +59,10 @@ class CRequest {
     } else {
       $prepend .= 'index.php/';
     }
-    return $prepend . rtrim($url, '/');
+    $url = trim($url, '/');
+    $method = empty($method) ? null : '/' . trim($method, '/');
+    $arguments = empty($arguments) ? null : '/' . trim($arguments, '/');    
+    return $prepend . rtrim("$url$method$arguments", '/');
   }
 
 
@@ -52,8 +72,9 @@ class CRequest {
    * Calculates the base_url of the installation. Stores all useful details in $this.
    *
    * @param $baseUrl string use this as a hardcoded baseurl.
+   * @param $routing array key/val to use for routing if url matches key.
    */
-  public function Init($baseUrl = null) {
+  public function Init($baseUrl = null, $routing=null) {
     $requestUri = $_SERVER['REQUEST_URI'];
     $scriptName = $_SERVER['SCRIPT_NAME'];    
     
@@ -75,6 +96,15 @@ class CRequest {
     if(empty($request) && isset($_GET['q'])) {
       $request = trim($_GET['q']);
     }
+
+    // Check if url matches an entry in routing table
+    $routed_from = null;
+    if(is_array($routing) && isset($routing[$request]) && $routing[$request]['enabled']) {
+      $routed_from = $request;
+      $request = $routing[$request]['url'];
+    }
+    
+    // Split the request into its parts   
     $splits = explode('/', $request);
     
     // Set controller, method and arguments
@@ -85,18 +115,19 @@ class CRequest {
     
     // Prepare to create current_url and base_url
     $currentUrl = $this->GetCurrentUrl();
-    $parts       = parse_url($currentUrl);
-    $baseUrl     = !empty($baseUrl) ? $baseUrl : "{$parts['scheme']}://{$parts['host']}" . (isset($parts['port']) ? ":{$parts['port']}" : '') . rtrim(dirname($scriptName), '/');
+    $parts      = parse_url($currentUrl);
+    $baseUrl    = !empty($baseUrl) ? $baseUrl : "{$parts['scheme']}://{$parts['host']}" . (isset($parts['port']) ? ":{$parts['port']}" : '') . rtrim(dirname($scriptName), '/');
     
     // Store it
     $this->base_url     = rtrim($baseUrl, '/') . '/';
     $this->current_url  = $currentUrl;
     $this->request_uri  = $requestUri;
     $this->script_name  = $scriptName;
+    $this->routed_from  = $routed_from;
     $this->request      = $request;
-    $this->splits        = $splits;
-    $this->controller    = $controller;
-    $this->method        = $method;
+    $this->splits       = $splits;
+    $this->controller   = $controller;
+    $this->method       = $method;
     $this->arguments    = $arguments;
   }
 
@@ -114,4 +145,5 @@ class CRequest {
     return $url;
   }
 
-} 
+
+}
